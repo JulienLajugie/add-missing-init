@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "add-missing-init"
-version = "0.0.2"
+version = "0.0.3"
 description = "Add a __init__.py file to each directory containing python source code."
 authors = ["Julien Lajugie"]
 readme = "README.md"
