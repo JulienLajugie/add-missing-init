@@ -30,4 +30,4 @@ classifiers = [
 python = "^3.6"
 
 [tool.poetry.scripts]
-add-missing-init = "add_missing_init:add_missing_init_files_from_path"
+add-missing-init = "add_missing_init:add_missing_init_files"
