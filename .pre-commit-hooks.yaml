@@ -1,6 +1,6 @@
 -   id: add-missing-init
     name: add-missing-init
-    description: Add a __init__.py file to each directoryadd_missing_init.py that contains .py files.
+    description: Add a __init__.py file to each directory containing python source code.
     entry: add-missing-init
     language: python
     language_version: python3

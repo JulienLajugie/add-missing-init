@@ -1,0 +1,88 @@
+# for a list of available hooks: https://pre-commit.com/hooks.html
+default_language_version:
+  python: python3.8
+fail_fast: true
+exclude: >-
+  ^docs/
+repos:
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v0.812
+    hooks:
+      - id: mypy
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.3.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-ast
+      - id: check-byte-order-marker
+      - id: check-builtin-literals
+      - id: check-case-conflict
+      - id: check-docstring-first
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: check-toml
+      - id: debug-statements
+      - id: detect-private-key
+      - id: end-of-file-fixer
+        exclude: >-
+          tests/.*/resources/.*
+      - id: mixed-line-ending
+      - id: trailing-whitespace
+  - repo: https://github.com/humitos/mirrors-autoflake
+    rev: v1.1
+    hooks:
+      - args:
+          - --remove-all-unused-imports
+          - --in-place
+        id: autoflake
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v2.7.4
+    hooks:
+      - id: pyupgrade
+  - repo: https://github.com/pre-commit/mirrors-isort
+    rev: v5.6.4
+    hooks:
+      - id: isort
+  - repo: https://github.com/ambv/black
+    rev: 20.8b1
+    hooks:
+      - id: black
+        args:
+          - --safe
+  - repo: https://github.com/asottile/blacken-docs
+    rev: v1.8.0
+    hooks:
+      - id: blacken-docs
+        additional_dependencies:
+          - black==19.10b0
+  - repo: https://github.com/asottile/add-trailing-comma
+    rev: v2.0.1
+    hooks:
+      - id: add-trailing-comma
+  - repo: https://github.com/pre-commit/pygrep-hooks
+    rev: v1.7.0
+    hooks:
+      - id: rst-backticks
+        exclude: 'docs'
+  - repo: https://github.com/asottile/setup-cfg-fmt
+    rev: v1.15.1
+    hooks:
+      - id: setup-cfg-fmt
+        args:
+          - --min-py3-version
+          - "3.8"
+  - repo: https://gitlab.com/pycqa/flake8.git
+    rev: 3.8.4
+    hooks:
+      - id: flake8
+        additional_dependencies:
+          - flake8-bugbear == 20.1.2
+        args:
+          - --ignore=E203,E501,W503
+          - --exclude=.git,__pycache__,build,dist,venv,pycache,docs/conf.py,old,.tox,setup.py
+  - repo: https://github.com/econchick/interrogate
+    rev: 1.3.2
+    hooks:
+      - id: interrogate
+        language_version: python3.8
+        exclude: setup.py|^docs/|^build/|^tests/

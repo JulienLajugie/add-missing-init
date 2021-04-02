@@ -4,8 +4,8 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "add-missing-init"
-version = "0.0.1"
-description = "Application to verify bioinformatics software"
+version = "0.0.2"
+description = "Add a __init__.py file to each directory containing python source code."
 authors = ["Julien Lajugie"]
 readme = "README.md"
 repository = "https://github.com/JulienLajugie/add-missing-init"
@@ -29,5 +29,10 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.6"
 
+[tool.poetry.dev-dependencies]
+pre-commit = "*"
+mypy = "*"
+check-manifest = "*"
+
 [tool.poetry.scripts]
-add-missing-init = "add_missing_init:add_missing_init_files"
+add-missing-init = "add_missing_init:main"
