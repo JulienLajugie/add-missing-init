@@ -1,0 +1,33 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "add-missing-init"
+version = "0.0.1"
+description = "Application to verify bioinformatics software"
+authors = ["Julien Lajugie"]
+readme = "README.md"
+repository = "https://github.com/JulienLajugie/add-missing-init"
+keywords = [
+    "add-missing-init",
+    "__init__.py"
+]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: POSIX",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Topic :: Software Development :: Testing"
+]
+
+[tool.poetry.dependencies]
+python = "^3.6"
+
+[tool.poetry.scripts]
+add-missing-init = "add_missing_init:add_missing_init_files_from_path"
