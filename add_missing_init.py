@@ -34,6 +34,8 @@ def add_missing_init_files_from_path(
         paths = [paths]
 
     for path in paths:
+        if not os.path.exists(path):
+            exit(f"Cannot find path {path}")
         root_directory = path if os.path.isdir(path) else os.path.dirname(path)
         add_missing_init_files(
             root_directory,
@@ -68,8 +70,11 @@ def add_missing_init_files(
     -------
     None
     """
-    assert os.path.exists(root_directory), "Cannot find root directory"
-    assert os.path.isdir(root_directory), "Root path should be a directory"
+    if not os.path.exists(root_directory):
+        exit(f"Cannot find directory {root_directory}")
+    if not os.path.isdir(root_directory):
+        exit(f"{root_directory} is not a directory")
+
     for dirpath, _, filenames in os.walk(root_directory):
         if dirpath in folders_to_ignore:
             continue
