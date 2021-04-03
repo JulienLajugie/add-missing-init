@@ -1,10 +1,10 @@
 # add-missing-init
 
-Add a `__init__.py` file to each directory containing python source code (the source code can be located in a subfolder).
+Add a `__init__.py` file to the specified directories if they - or one of their subfolders - contain python source code.
 
 
 ### Usage 
-add-missing-init [-h] [-i FOLDERS_TO_IGNORE] [-t FOLDER_TREES_TO_IGNORE] [-e SOURCE_EXTENSIONS] [source_tree [source_tree ...]]
+Add-missing-init [-h] [-i FOLDERS_TO_IGNORE] [-t FOLDER_TREES_TO_IGNORE] [-e SOURCE_EXTENSIONS] [-r] [source_tree [source_tree ...]]
 
 ### Positional Arguments
   source_tree           location for the source tree
@@ -21,3 +21,5 @@ add-missing-init [-h] [-i FOLDERS_TO_IGNORE] [-t FOLDER_TREES_TO_IGNORE] [-e SOU
 
   -e SOURCE_EXTENSIONS, --source-extensions SOURCE_EXTENSIONS
                         Files with these extensions will be considered python source code.
+
+  -r, --recursive       Recursively add missing __init__.py to the subfolders as well.
