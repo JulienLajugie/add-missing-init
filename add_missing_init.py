@@ -20,11 +20,11 @@ def add_missing_init_files_from_path(
     paths
         List of root path containing the python code.
     folders_to_ignore
-        List of folders names that will not be added an __init__.py file.
+        List of folders paths that will be excluded. The folder path should be relative to the source_tree. Their subdirectories will NOT be excluded.
     source_extensions
          Files with these extensions will be considered python source code.
     folder_trees_to_ignore
-        List of folders names that will not be added an __init__.py file. Their subdirectories will also be ignored.
+        List of folders names that will be excluded. Their subdirectories will ALSO be excluded.
 
     Returns
     -------
@@ -60,11 +60,11 @@ def add_missing_init_files(
     root_directory
         Root path containing the python code.
     folders_to_ignore
-        List of folders names that will not be added an __init__.py file.
+        List of folders paths that will be excluded. The folder path should be relative to the source_tree. Their subdirectories will NOT be excluded.
     source_extensions
          Files with these extensions will be considered python source code.
     folder_trees_to_ignore
-         List of folders names that will not be added an __init__.py file. Their subdirectories will also be ignored.
+         List of folders names that will be excluded. Their subdirectories will ALSO be excluded.
 
     Returns
     -------
@@ -102,7 +102,7 @@ def directory_contains_python(
     extensions
         Files with these extensions will be considered python source code.
     folder_trees_to_ignore
-        List of folders names that will not be added an __init__.py file. Their subdirectories will also be ignored.
+        List of folders names that will be excluded. Their subdirectories will ALSO be excluded.
 
     Returns
     -------
@@ -141,13 +141,13 @@ def main() -> None:
     parser.add_argument(
         "-i",
         "--folders-to-ignore",
-        help="List of folders names that will not be added an __init__.py file.",
+        help="List of folders paths that will be excluded. The folder path should be relative to the source_tree. Their subdirectories will NOT be excluded.",
         default="src,tests,.",
     )
     parser.add_argument(
         "-t",
         "--folder-trees-to-ignore",
-        help="List of folders names that will not be added an __init__.py file. Their subdirectories will also be ignored.",
+        help="List of folders names that will be excluded. Their subdirectories will ALSO be excluded.",
         default="__pycache__",
     )
     parser.add_argument(
