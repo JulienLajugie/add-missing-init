@@ -142,7 +142,7 @@ def main() -> None:
         "-i",
         "--folders-to-ignore",
         help="List of folders paths that will be excluded. The folder path should be relative to the source_tree. Their subdirectories will NOT be excluded.",
-        default="src,tests,.",
+        default=".,src,tests",
     )
     parser.add_argument(
         "-t",

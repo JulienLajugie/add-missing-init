@@ -5,7 +5,7 @@
     language: python
     language_version: python3
     pass_filenames: true
+    args: src
     types: [file, python]
-    verbose: true
     require_serial: true
     minimum_pre_commit_version: 1.6.0
