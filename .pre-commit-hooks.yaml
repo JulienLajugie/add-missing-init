@@ -5,6 +5,6 @@
     language: python
     language_version: python3
     pass_filenames: true
-    types: [file, python]
+    types_or: [python, directory]
     require_serial: true
     minimum_pre_commit_version: 1.6.0

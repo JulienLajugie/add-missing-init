@@ -42,13 +42,14 @@ def add_missing_init_files_from_path(
         root_directory = path if os.path.isdir(path) else os.path.dirname(path)
         if root_directory == "":
             root_directory = "."
-        init_file_added = init_file_added or add_missing_init_files(
+        if add_missing_init_files(
             root_directory,
             folders_to_ignore,
             source_extensions,
             folder_trees_to_ignore,
             recursive,
-        )
+        ):
+            init_file_added = True
 
     return init_file_added
 
