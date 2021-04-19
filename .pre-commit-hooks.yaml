@@ -1,5 +1,5 @@
 -   id: add-missing-init
-    name: Add Missing __init__.py Files
+    name: Add missing __init__.py files
     description: Add a __init__.py file to each directory containing python source code.
     entry: add-missing-init
     language: python
