@@ -102,7 +102,7 @@ def main() -> None:
         "--folders-to-ignore",
         nargs="*",
         help="List of folders paths that will be excluded. The folder path should be relative to the repo root.",
-        default=[".", "src", "tests", "src/trip"]
+        default=[".", "src", "tests"]
     )
     args = parser.parse_args()
 
