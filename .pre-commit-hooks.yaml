@@ -4,7 +4,6 @@
     entry: add-missing-init
     language: python
     language_version: python3
-    pass_filenames: true
-    types_or: [file, directory]
+    types: [python]
     require_serial: true
     minimum_pre_commit_version: 1.6.0

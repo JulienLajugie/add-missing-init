@@ -8,26 +8,18 @@ INIT_FILE_NAME = "__init__.py"
 def add_missing_init_files_from_path(
     paths: List[str],
     folders_to_ignore: List[str],
-    source_extensions: List[str],
-    folder_trees_to_ignore: List[str],
-    recursive: bool,
 ) -> bool:
     """
-    Add missing __init__.py files to the specified root directories and subdirectories that contain at least one python
-    module (the python module does not have to be in the directory directly, it can be in a subdirectory.
+    For each of the input file paths, add __init__.py to its folder or any sub-folders
+    if the folder is not listed in folders_to_ignore.
 
     Parameters
     ----------
     paths
-        List of root path containing the python code.
+        List of paths corresponding to python code.
     folders_to_ignore
-        List of folders paths that will be excluded. The folder path should be relative to the source_tree. Their subdirectories will NOT be excluded.
-    source_extensions
-         Files with these extensions will be considered python source code.
-    folder_trees_to_ignore
-        List of folders names that will be excluded. Their subdirectories will ALSO be excluded.
-    recursive
-        Recursively add missing __init__.py to the subfolders as well.
+        List of folders paths that will be excluded. The folder path should be relative to the source_tree.
+        Their subdirectories will NOT be excluded.
 
     Returns
     -------
@@ -39,15 +31,12 @@ def add_missing_init_files_from_path(
     for path in paths:
         if not os.path.exists(path):
             exit(f"Cannot find path {path}")
-        root_directory = path if os.path.isdir(path) else os.path.dirname(path)
-        if root_directory == "":
-            root_directory = "."
+        if not os.path.isfile(path):
+            exit(f"input path does not correspond to a file {path}")
+        input_directory = os.path.dirname(path) or '.'
         if add_missing_init_files(
-            root_directory,
+            input_directory,
             folders_to_ignore,
-            source_extensions,
-            folder_trees_to_ignore,
-            recursive,
         ):
             init_file_added = True
 
@@ -55,94 +44,45 @@ def add_missing_init_files_from_path(
 
 
 def add_missing_init_files(
-    root_directory: str,
+    input_directory: str,
     folders_to_ignore: List[str],
-    source_extensions: List[str],
-    folder_trees_to_ignore: List[str],
-    recursive: bool,
 ) -> bool:
     """
-    Add missing __init__.py files to the specified root directory and subdirectories that contain at least one python
-    module (the python module does not have to be in the directory directly, it can be in a subdirectory.
+    Add __init__.py to the specified folder or any sub-folders that are not listed in folders_to_ignore.
 
     Parameters
     ----------
-    root_directory
-        Root path containing the python code.
+    input_directory
+        Folder to add where to add a init file.
     folders_to_ignore
-        List of folders paths that will be excluded. The folder path should be relative to the source_tree. Their subdirectories will NOT be excluded.
-    source_extensions
-         Files with these extensions will be considered python source code.
-    folder_trees_to_ignore
-         List of folders names that will be excluded. Their subdirectories will ALSO be excluded.
-    recursive
-        Recursively add missing __init__.py to the subfolders as well.
+        List of folders paths that will be excluded. The folder path should be relative to the source_tree.
+        Their subdirectories will NOT be excluded.
 
     Returns
     -------
     bool
         True if some init files were added, false otherwise.
     """
-    if not os.path.exists(root_directory):
-        exit(f"Cannot find directory {root_directory}")
-    if not os.path.isdir(root_directory):
-        exit(f"{root_directory} is not a directory")
+    if not os.path.exists(input_directory):
+        exit(f"Cannot find directory {input_directory}")
+    if not os.path.isdir(input_directory):
+        exit(f"{input_directory} is not a directory")
 
     init_file_added = False
 
-    for dirpath, _, filenames in os.walk(root_directory):
-        dirpath = os.path.normpath(dirpath)
-        if dirpath not in folders_to_ignore and INIT_FILE_NAME not in filenames and directory_contains_python(
-            dirpath,
-            source_extensions,
-            folder_trees_to_ignore,
-        ):
-            print(f"Adding {INIT_FILE_NAME} in {dirpath}")
-            open(os.path.join(dirpath, INIT_FILE_NAME), "a").close()
-            init_file_added = True
-        if not recursive:
-            break
+    if input_directory not in folders_to_ignore and not os.path.isfile(f"{input_directory}/{INIT_FILE_NAME}"):
+        print(f"Adding {INIT_FILE_NAME} in {input_directory}")
+        open(os.path.join(input_directory, INIT_FILE_NAME), "a").close()
+        init_file_added = True
 
-    return init_file_added
+    parent_init_added = False
 
+    parent_directory = os.path.dirname(input_directory) or '.'
 
-def directory_contains_python(
-    root_directory: str,
-    extensions: List[str],
-    folder_trees_to_ignore: List[str],
-) -> bool:
-    """
-    Return true if the specified folder or one of its subfolders contain a python file (with .py extension), false otherwise.
+    if parent_directory != input_directory:
+        parent_init_added = add_missing_init_files(parent_directory, folders_to_ignore)
 
-    Parameters
-    ----------
-    root_directory
-        Root directory to scan
-    extensions
-        Files with these extensions will be considered python source code.
-    folder_trees_to_ignore
-        List of folders names that will be excluded. Their subdirectories will ALSO be excluded.
-
-    Returns
-    -------
-    bool
-        True if the specified folder contain a python file, false otherwise.
-    """
-    for dirpath, dirnames, filenames in os.walk(root_directory):
-        if any(
-            os.path.splitext(extension)[-1] in extensions for extension in filenames
-        ):
-            return True
-        for dirname in dirnames:
-            if dirname in folder_trees_to_ignore:
-                continue
-            if directory_contains_python(
-                os.path.join(dirpath, dirname),
-                extensions,
-                folder_trees_to_ignore,
-            ):
-                return True
-    return False
+    return init_file_added or parent_init_added
 
 
 def main() -> None:
@@ -153,47 +93,22 @@ def main() -> None:
         description="Add a __init__.py file to the specified directories if they - or one of their subfolders - contain python source code.",
     )
     parser.add_argument(
-        "source_tree",
-        default=".",
+        "file_paths",
         nargs="*",
-        help="location for the source tree",
+        help="Location of the python files passed by pre-commit. The locations are relative to the repo root.",
     )
     parser.add_argument(
         "-i",
         "--folders-to-ignore",
-        help="List of folders paths that will be excluded. The folder path should be relative to the source_tree. Their subdirectories will NOT be excluded.",
-        default=".,src,tests",
-    )
-    parser.add_argument(
-        "-t",
-        "--folder-trees-to-ignore",
-        help="List of folders names that will be excluded. Their subdirectories will ALSO be excluded.",
-        default="__pycache__",
-    )
-    parser.add_argument(
-        "-e",
-        "--source-extensions",
-        help="Files with these extensions will be considered python source code.",
-        default=".py,.pyi",
-    )
-    parser.add_argument(
-        "-r",
-        "--recursive",
-        action="store_true",
-        help="Recursively add missing __init__.py to the subfolders as well.",
+        nargs="*",
+        help="List of folders paths that will be excluded. The folder path should be relative to the repo root.",
+        default=[".", "src", "tests", "src/trip"]
     )
     args = parser.parse_args()
-    folders_to_ignore = args.folders_to_ignore.split(",")
-    folders_to_ignore = list(map(os.path.normpath, folders_to_ignore))
-    source_extensions = args.source_extensions.split(",")
-    folder_trees_to_ignore = args.folder_trees_to_ignore.split(",")
 
     init_added = add_missing_init_files_from_path(
-        args.source_tree,
-        folders_to_ignore,
-        source_extensions,
-        folder_trees_to_ignore,
-        args.recursive,
+        args.file_paths,
+        args.folders_to_ignore,
     )
 
     if init_added:
