@@ -1,25 +1,37 @@
 # add-missing-init
 
-Add a `__init__.py` file to the specified directories if they - or one of their subfolders - contain python source code.
+Add a __init__.py to the folder of the specified python files. This tool should be run from the root directory of a python project. It is mosty meant to be used as a pre-commit hook.
 
 
-### Usage 
-Add-missing-init [-h] [-i FOLDERS_TO_IGNORE] [-t FOLDER_TREES_TO_IGNORE] [-e SOURCE_EXTENSIONS] [-r] [source_tree [source_tree ...]]
+## As a pre-commit hook
+
+See [pre-commit](https://github.com/pre-commit/pre-commit) for instructions
+
+Sample `.pre-commit-config.yaml`:
+
+```yaml
+  - repo: https://github.com/JulienLajugie/add-missing-init
+    rev: v0.0.16
+    hooks:
+      - id: add-missing-init
+        args:
+          - --folders-to-ignore
+          - .
+          - src
+          - tests
+          - docs/source
+          - --
+```
+
+## As a command-line tool
+
+### Usage
+add-missing-init [-h] [-i [FOLDERS_TO_IGNORE [FOLDERS_TO_IGNORE ...]]] [file_paths [file_paths ...]]
 
 ### Positional Arguments
-  source_tree           location for the source tree
+  file_paths            Location of the python files passed by pre-commit. The locations are relative to the repo root.
 
 ### Optional Arguments
-  
   -h, --help            show this help message and exit
-  
-  -i FOLDERS_TO_IGNORE, --folders-to-ignore FOLDERS_TO_IGNORE
-                        List of folders paths that will be excluded. The folder path should be relative to the source_tree. Their subdirectories will NOT be excluded.
-
-  -t FOLDER_TREES_TO_IGNORE, --folder-trees-to-ignore FOLDER_TREES_TO_IGNORE
-                        List of folders names that will be excluded. Their subdirectories will ALSO be excluded.
-
-  -e SOURCE_EXTENSIONS, --source-extensions SOURCE_EXTENSIONS
-                        Files with these extensions will be considered python source code.
-
-  -r, --recursive       Recursively add missing __init__.py to the subfolders as well.
+  -i [FOLDERS_TO_IGNORE [FOLDERS_TO_IGNORE ...]], --folders-to-ignore [FOLDERS_TO_IGNORE [FOLDERS_TO_IGNORE ...]]
+                        List of folders paths that will be excluded. The folder path should be relative to the repo root.

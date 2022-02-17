@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "add-missing-init"
-version = "0.0.15"
+version = "0.0.16"
 description = "Add a __init__.py file to each directory containing python source code."
 authors = ["Julien Lajugie"]
 readme = "README.md"
@@ -36,3 +36,18 @@ check-manifest = "*"
 
 [tool.poetry.scripts]
 add-missing-init = "add_missing_init:main"
+
+[tool.interrogate]
+ignore-init-method = true
+ignore-init-module = true
+ignore-magic = true
+ignore-semiprivate = true
+ignore-private = true
+ignore-property-decorators = true
+ignore-module = true
+ignore-nested-functions = true
+fail-under = 85
+verbose = 1
+quiet = false
+whitelist-regex = []
+color = true

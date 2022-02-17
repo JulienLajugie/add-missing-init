@@ -33,7 +33,7 @@ def add_missing_init_files_from_path(
             exit(f"Cannot find path {path}")
         if not os.path.isfile(path):
             exit(f"input path does not correspond to a file {path}")
-        input_directory = os.path.dirname(path) or '.'
+        input_directory = os.path.dirname(path) or "."
         if add_missing_init_files(
             input_directory,
             folders_to_ignore,
@@ -70,14 +70,16 @@ def add_missing_init_files(
 
     init_file_added = False
 
-    if input_directory not in folders_to_ignore and not os.path.isfile(f"{input_directory}/{INIT_FILE_NAME}"):
+    if input_directory not in folders_to_ignore and not os.path.isfile(
+        f"{input_directory}/{INIT_FILE_NAME}",
+    ):
         print(f"Adding {INIT_FILE_NAME} in {input_directory}")
         open(os.path.join(input_directory, INIT_FILE_NAME), "a").close()
         init_file_added = True
 
     parent_init_added = False
 
-    parent_directory = os.path.dirname(input_directory) or '.'
+    parent_directory = os.path.dirname(input_directory) or "."
 
     if parent_directory != input_directory:
         parent_init_added = add_missing_init_files(parent_directory, folders_to_ignore)
@@ -90,7 +92,9 @@ def main() -> None:
     Entry point with arg parser.
     """
     parser = argparse.ArgumentParser(
-        description="Add a __init__.py file to the specified directories if they - or one of their subfolders - contain python source code.",
+        description="Add a __init__.py to the folder of the specified python files. "
+        "This tool should be run from the root directory of a python project. "
+        "It is mosty meant to be used as a pre-commit hook.",
     )
     parser.add_argument(
         "file_paths",
@@ -102,7 +106,7 @@ def main() -> None:
         "--folders-to-ignore",
         nargs="*",
         help="List of folders paths that will be excluded. The folder path should be relative to the repo root.",
-        default=[".", "src", "tests"]
+        default=[".", "src", "tests"],
     )
     args = parser.parse_args()
 
